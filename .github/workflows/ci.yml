@@ -37,6 +37,7 @@ jobs:
 
       - name: Run Prolog plunit tests
         run: |
+          swipl -g run_tests -t halt tests/test_search.pl
           swipl -g run_tests -t halt tests/test_labyrinth.pl
           swipl -g run_tests -t halt tests/test_puzzle8.pl
 
