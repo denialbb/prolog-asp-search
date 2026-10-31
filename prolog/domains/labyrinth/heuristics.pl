@@ -9,8 +9,10 @@
 %%   * Manhattan is admissible and consistent. One orthogonal move changes the
 %%     distance to any fixed cell by exactly one, and the minimum of 1-Lipschitz
 %%     functions is 1-Lipschitz.
-%%   * Euclidean is admissible and consistent as well, but it is dominated by
-%%     Manhattan and therefore expands at least as many nodes.
+%%   * Euclidean is admissible and consistent as well, but Manhattan dominates
+%%     it pointwise. The stronger estimate is expected to guide the search
+%%     better; in A* the two can still expand a similar number of nodes, while
+%%     in IDA* the difference in threshold iterations is usually much larger.
 %% Manhattan would lose admissibility if diagonal unit-cost moves were allowed;
 %% the move model stays explicitly orthogonal.
 :- module(labyrinth_heuristics,
