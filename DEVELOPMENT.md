@@ -1,52 +1,73 @@
-# Linee Guida di Sviluppo e Standard di Progetto
+# Development Guidelines and Project Standards
 
-Documento interno per lo sviluppo del progetto e criteri di qualità del codice da consegnare per la valutazione d'esame.
-
----
-
-## 1. Standard di Codice e Commenti
-
-- **Stile dichiarativo e modulare**:
-  - Prolog: separare chiaramente il motore di ricerca agnostico (`prolog/search/`) dalla logica dei domini (`prolog/domains/`). Predicati con clausole concise, uso corretto del cut verde, denominazione standard in italiano/inglese coerente.
-  - ASP (Clingo): struttura formale `generate-test-optimize`, minimi accoppiamenti e vincoli espliciti.
-- **Commenti descrittivi e non storici**:
-  - Documentare la semantica dei predicati (argomenti, modalità `+`, `-`, `?`) e la razionale teorica delle euristiche (ammissibilità, consistenza).
-  - **Vietati commenti storici o cronologie modifiche nel codice sorgente** (es. "risolto bug con... ", "modificato da...", "tentativo precedente commentato"). Il versionamento spetta unicamente alla cronologia Git.
-  - Rimuovere blocchi di codice non utilizzati.
+Internal guidelines for development and for the code quality expected in the
+exam deliverable.
 
 ---
 
-## 2. Test-Driven Development (TDD) e Complessità Ciclomatica
+## 1. Code and comment standards
 
-- **Flusso Red-Green**:
-  - Definire casi di test preliminari in `tests/` per domini, euristiche e vincoli di torneo.
-  - Validare il passaggio da test in stato *failing* (Red) a *passing* (Green) man mano che i moduli algoritmici vengono integrati.
-- **Complessità Ciclomatica**:
-  - Mantenere la complessità logica di ciascun componente entro limiti stringenti (complessità per funzione $\le 10$).
-  - I test automatici (`tests/test_complexity.py` via `radon` e `flake8`) verificano che il codice di supporto e benchmark rispetti la soglia massima $B$.
+- **Declarative, modular style.**
+  - Prolog: keep the domain-agnostic search engine (`prolog/search/`) clearly
+    separated from the domain logic (`prolog/domains/`). Write short clauses,
+    use green cuts only, and keep naming consistent in English.
+  - ASP (Clingo): follow the formal *generate–test–optimize* structure, with
+    explicit pairings and constraints.
+- **Descriptive, non-historical comments.**
+  - Document predicate semantics (arguments and modes `+`, `-`, `?`) and the
+    theoretical rationale of each heuristic (admissibility, consistency).
+  - Historical comments or change logs in source code are forbidden (for
+    example “fixed bug with…”, “changed by…”, “previous attempt commented
+    out”). Version control belongs to Git history.
+  - Remove unused code blocks.
 
 ---
 
-## 3. Automazione CI (GitHub Actions)
+## 2. Test-driven development and cyclomatic complexity
 
-La pipeline CI (`.github/workflows/ci.yml`) viene eseguita ad ogni commit su `main`:
-1. Esecuzione dei test unitari Prolog con `plunit` su SWI-Prolog (`swipl -g run_tests -t halt ...`).
-2. Verifica vincoli ASP con Clingo via suite `pytest`.
-3. Validazione della complessità ciclomatica e linting sintattico con `radon` e `flake8`.
+- **Red–green flow.**
+  - Define preliminary test cases in `tests/` for domains, heuristics, and
+    tournament constraints.
+  - Track the transition from failing tests (red) to passing tests (green) as
+    the algorithmic modules are integrated.
+- **Cyclomatic complexity.**
+  - Keep the logical complexity of each component within strict limits
+    (complexity per function ≤ 10).
+  - The automated tests (`tests/test_complexity.py` via `radon` and `flake8`)
+    verify that support and benchmark code stays below the maximum threshold.
 
-Per eseguire localmente prima del push:
+---
+
+## 3. CI automation (GitHub Actions)
+
+The CI pipeline (`.github/workflows/ci.yml`) runs on every push to `main` and
+on every pull request:
+
+1. Unit tests for the Prolog engines and domains with `plunit` on SWI-Prolog
+   (`swipl -g run_tests -t halt ...`).
+2. ASP constraint verification with Clingo through the `pytest` suite.
+3. Cyclomatic-complexity and syntax linting with `radon` and `flake8`.
+
+To run the checks locally before pushing:
+
 ```bash
+swipl -g run_tests -t halt tests/test_search.pl
 swipl -g run_tests -t halt tests/test_labyrinth.pl
 swipl -g run_tests -t halt tests/test_puzzle8.pl
 pytest -v tests/
-radon cc -s -a -nb tests/
+flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+radon cc -s -a -nb tests/ asp/ prolog/
 ```
 
 ---
 
-## 4. Integrità della Consegna Accademica
+## 4. Academic integrity of the deliverable
 
-Il codice sorgente e la relazione/slide saranno esaminati dai docenti:
-- Assenza assoluta di marcatori, boilerplate o pattern riconducibili a generatori automatici o intelligenze artificiali.
-- Struttura dei commit pulita, atomica e descrittiva con convenzione standard (`feat:`, `fix:`, `test:`, `docs:`).
-- Documentazione e commenti redatti con rigore accademico e piena padronanza concettuale degli algoritmi.
+The source code and the report/slides will be examined by the instructors:
+
+- No markers, boilerplate, or patterns attributable to automatic generators
+  or artificial intelligence.
+- A clean, atomic, descriptive commit history following the standard
+  convention (`feat:`, `fix:`, `test:`, `docs:`).
+- Documentation and comments written with academic rigour and full conceptual
+  command of the algorithms.
