@@ -1,0 +1,18 @@
+# SWI-Prolog
+*.qlf
+*~
+*.swp
+
+# Clingo / ASP outputs
+*.out
+*.tmp
+
+# Python & benchmarking
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# OS / logs
+.DS_Store
+*.log
