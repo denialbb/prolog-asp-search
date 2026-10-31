@@ -16,3 +16,6 @@ venv/
 # OS / logs
 .DS_Store
 *.log
+
+# Benchmark outputs
+prolog/benchmarks/results/*.csv
