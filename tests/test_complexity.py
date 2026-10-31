@@ -5,7 +5,12 @@ import pytest
 
 def get_python_files():
     root = Path(__file__).resolve().parent.parent
-    files = list(root.glob("*.py")) + list(root.glob("tests/*.py")) + list(root.glob("prolog/**/*.py"))
+    files = (
+        list(root.glob("*.py"))
+        + list(root.glob("tests/*.py"))
+        + list(root.glob("prolog/**/*.py"))
+        + list(root.glob("asp/*.py"))
+    )
     return [f for f in files if not f.name.startswith(".")]
 
 
